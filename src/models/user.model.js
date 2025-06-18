@@ -47,6 +47,8 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+//password Encryption with bcrypt
+
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
 
@@ -58,6 +60,7 @@ userSchema.methods.ispasswordCorrect = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
+//token verifying with JWT(jsonwebtoken)
 userSchema.methods.generateAccessToken = function () {
   return jwt.sign(
     {
@@ -70,6 +73,7 @@ userSchema.methods.generateAccessToken = function () {
     { expiresIn: process.env.ACCESS_TOKEN_EXPIRY }
   );
 };
+//token verifying with JWT(jsonwebtoken)for refresh
 userSchema.methods.generateRefreshToken = function () {
   return jwt.sign(
     {
